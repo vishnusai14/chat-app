@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" name="" id="msg" />
+    <button type="submit">Send</button>
+    <ul>
+
+    </ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io("http://localhost:8000")
+        socket.on('connect', (data) => {
+            socket.emit('messageToServer', "Hello Server This Message From The Client Side");
+            socket.on("messageFromServer", (msg) => {
+                // console.log(msg)
+            })
+            document.querySelector("button").addEventListener("click", function() {
+                const chatMessage = document.querySelector("input").value;
+
+                socket.emit('chatMsg', chatMessage)
+            })
+            socket.on('chatMsgTo', (chat) => {
+                document.querySelector("ul").innerHTML += "<li>" + chat + "</li>"
+            })
+        })
+    </script>
+</body>
+
+</html>
